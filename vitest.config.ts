@@ -20,6 +20,7 @@ export default defineConfig({
         'lib/db.ts',
         'lib/embedding.ts',
         'lib/bg-removal.ts',
+        'lib/parse-title.ts',
       ],
       thresholds: {
         lines: 100,

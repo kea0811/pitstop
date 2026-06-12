@@ -6,6 +6,7 @@ import { UpcScanner } from '@/components/scanner/UpcScanner';
 import { ItemForm } from '@/components/add/ItemForm';
 import { Spinner } from '@/components/ui/Spinner';
 import { Button } from '@/components/ui/Button';
+import { parseDiecastTitle } from '@/lib/parse-title';
 import type { UpcProductData } from '@/models/UpcCache';
 
 type Step =
@@ -13,12 +14,6 @@ type Step =
   | { kind: 'looking-up'; upc: string }
   | { kind: 'confirm'; upc: string; data: UpcProductData | null }
   | { kind: 'failed'; upc: string; message: string; manualFallback: boolean };
-
-/** Try to pull a model year out of a product title like "… 2024 Showroom …". */
-function guessYear(title: string): number | undefined {
-  const match = title.match(/\b(19[5-9]\d|20[0-4]\d)\b/);
-  return match ? Number.parseInt(match[0], 10) : undefined;
-}
 
 export function ScanFlow() {
   const [step, setStep] = useState<Step>({ kind: 'scanning' });
@@ -96,7 +91,7 @@ export function ScanFlow() {
         source="upc"
         initial={{
           name: step.data?.title ?? '',
-          year: step.data ? guessYear(step.data.title) : undefined,
+          ...(step.data ? parseDiecastTitle(step.data.title) : {}),
           upc: step.upc,
           remotePhotoUrl: step.data?.images[0],
         }}
