@@ -105,7 +105,7 @@ export function ItemDetail({ id }: { id: string }) {
         <p className="mb-4 rounded-xl border border-danger/40 bg-danger/10 p-3 text-sm text-danger">{error}</p>
       ) : null}
 
-      {item.photos.length === 1 ? (
+      {item.photos.length === 1 && item.photos[0] ? (
         // Single photo: full-width, so it reads as centered in the column.
         // eslint-disable-next-line @next/next/no-img-element
         <img
