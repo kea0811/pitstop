@@ -21,7 +21,7 @@ export default async function LoginPage({
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-end px-6 pb-16 pt-12">
       <div className="mb-auto pt-10">
-        <p className="text-sm font-extrabold uppercase tracking-[0.3em] text-accent">The Vault</p>
+        <p className="text-sm font-extrabold uppercase tracking-[0.3em] text-accent">Pitstop</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-ink">
           Every car in your collection, one scan away.
         </h1>

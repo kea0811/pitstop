@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 /**
- * The Vault emblem — a gold bat-in-ring badge (generated artwork in
+ * Pitstop emblem — a gold bat-in-ring badge (generated artwork in
  * /public/logo.png). Decorative; hidden from assistive tech since the wordmark
  * beside it carries the name.
  */

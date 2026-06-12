@@ -90,7 +90,7 @@ export function CollectionBrowser() {
             </button>
           </div>
         ) : items === null ? (
-          <Spinner label="Opening the vault…" />
+          <Spinner label="Opening the garage…" />
         ) : items.length === 0 ? (
           <EmptyVault />
         ) : (
@@ -163,7 +163,7 @@ function Masthead({ ownedCount, wantedCount }: { ownedCount: number; wantedCount
           <Logo className="h-11 w-11 shrink-0" />
           <span className="min-w-0">
             <span className="block truncate text-xl font-extrabold uppercase leading-none tracking-tight text-ink">
-              The <span className="text-accent">Vault</span>
+              Pit<span className="text-accent">stop</span>
             </span>
             <span className="mt-0.5 block truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
               Diecast Collection
@@ -207,7 +207,7 @@ function EmptyVault() {
     <div className="flex flex-col items-center gap-5 px-6 py-20 text-center">
       <Logo className="h-24 w-24 opacity-90" />
       <div>
-        <h2 className="text-2xl font-extrabold text-ink">The vault is empty</h2>
+        <h2 className="text-2xl font-extrabold text-ink">Your garage is empty</h2>
         <p className="mt-2 text-base text-ink-muted">Start adding your diecast collection</p>
       </div>
       <Link

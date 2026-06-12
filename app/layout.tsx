@@ -11,12 +11,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'The Vault', template: '%s — The Vault' },
+  title: { default: 'Pitstop', template: '%s — Pitstop' },
   description:
     'Phone-first catalog for diecast collectors. Scan barcodes, match loose cars by photo, and browse your collection anywhere — even offline.',
-  applicationName: 'The Vault',
+  applicationName: 'Pitstop',
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'The Vault' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Pitstop' },
 };
 
 export const viewport: Viewport = {
