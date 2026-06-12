@@ -16,7 +16,6 @@ import { Logo } from '@/components/ui/Logo';
 export function PhoneFirstAuth({ children }: { children: React.ReactNode }) {
   const [isDesktop, setIsDesktop] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [showForm, setShowForm] = useState(false);
   const [qr, setQr] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,8 +39,9 @@ export function PhoneFirstAuth({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Until mounted, render the form (mobile-first assumption — avoids a desktop
-  // visitor seeing nothing). On desktop we then swap to the QR.
-  if (!mounted || !isDesktop || showForm) {
+  // visitor seeing nothing). On desktop we then swap to the QR-only screen;
+  // there is no browser fallback (the app needs a phone camera).
+  if (!mounted || !isDesktop) {
     return <>{children}</>;
   }
 
@@ -70,13 +70,9 @@ export function PhoneFirstAuth({ children }: { children: React.ReactNode }) {
           <div className="mx-auto h-56 w-56 animate-pulse rounded-xl bg-white/5" />
         )}
 
-        <button
-          type="button"
-          onClick={() => setShowForm(true)}
-          className="mt-6 text-sm font-semibold text-accent underline-offset-4 hover:underline"
-        >
-          Continue in this browser instead
-        </button>
+        <p className="mt-6 text-xs uppercase tracking-[0.15em] text-ink-muted">
+          Point your phone camera at the code
+        </p>
       </div>
     </div>
   );
