@@ -17,7 +17,7 @@ export function CameraFab() {
     <Link
       href="/add"
       aria-label="Add a car"
-      className="fixed right-5 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-accent text-bg shadow-[0_8px_30px_rgba(255,212,0,0.35)] transition-transform active:scale-95"
+      className="fixed right-5 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-accent text-bg shadow-[0_8px_30px_rgba(255,241,19,0.35)] transition-transform active:scale-95"
       style={{
         bottom: demo
           ? 'calc(env(safe-area-inset-bottom, 0px) + 4rem)'

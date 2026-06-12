@@ -53,7 +53,7 @@ export function UpcScanner({ onDecoded }: { onDecoded: (upc: string) => void }) 
       ) : (
         <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-panel">
           <video ref={videoRef} className="aspect-[4/5] w-full object-cover" muted playsInline />
-          <div aria-hidden className="pointer-events-none absolute inset-x-8 top-1/2 h-0.5 -translate-y-1/2 rounded bg-accent/80 shadow-[0_0_20px_rgba(255,212,0,0.8)]" />
+          <div aria-hidden className="pointer-events-none absolute inset-x-8 top-1/2 h-0.5 -translate-y-1/2 rounded bg-accent/80 shadow-[0_0_20px_rgba(255,241,19,0.8)]" />
           <p className="absolute inset-x-0 bottom-3 text-center text-xs text-ink-muted">
             Line up the barcode on the back of the card
           </p>

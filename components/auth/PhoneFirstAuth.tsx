@@ -30,7 +30,7 @@ export function PhoneFirstAuth({ children }: { children: React.ReactNode }) {
     QRCode.toDataURL(window.location.origin + '/login', {
       width: 320,
       margin: 1,
-      color: { dark: '#0a0a0a', light: '#ffd400' }, // bat-gold QR on the brand accent
+      color: { dark: '#0a0a0a', light: '#fff113' }, // bat-gold QR on the brand accent
       errorCorrectionLevel: 'M',
     })
       .then(setQr)
