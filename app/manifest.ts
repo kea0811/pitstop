@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Pitstop — diecast collection',
-    short_name: 'Pitstop',
+    name: 'Gotham Garage — diecast collection',
+    short_name: 'Gotham Garage',
     description:
       'Phone-first catalog for diecast collectors. Scan barcodes, match loose cars by photo, browse offline.',
     start_url: '/collection',

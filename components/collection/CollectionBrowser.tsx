@@ -163,7 +163,7 @@ function Masthead({ ownedCount, wantedCount }: { ownedCount: number; wantedCount
           <Logo className="h-11 w-11 shrink-0" />
           <span className="min-w-0">
             <span className="block truncate text-xl font-extrabold uppercase leading-none tracking-tight text-ink">
-              Pit<span className="text-accent">stop</span>
+              Gotham <span className="text-accent">Garage</span>
             </span>
             <span className="mt-0.5 block truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
               Diecast Collection

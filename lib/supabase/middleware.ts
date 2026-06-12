@@ -59,7 +59,7 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
 
   if (!user && !isDemo && !isPublicPath(pathname)) {
     if (pathname.startsWith('/api/')) {
-      return NextResponse.json({ error: 'Sign in to use Pitstop.' }, { status: 401 });
+      return NextResponse.json({ error: 'Sign in to use Gotham Garage.' }, { status: 401 });
     }
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = '/login';

@@ -19,7 +19,7 @@ export async function requireUser(): Promise<SessionUser | NextResponse> {
   }
   const user = await getSessionUser();
   if (!user) {
-    return NextResponse.json({ error: 'Sign in to use Pitstop.' }, { status: 401 });
+    return NextResponse.json({ error: 'Sign in to use Gotham Garage.' }, { status: 401 });
   }
   return user;
 }

@@ -11,12 +11,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'Pitstop', template: '%s — Pitstop' },
+  title: { default: 'Gotham Garage', template: '%s — Gotham Garage' },
   description:
     'Phone-first catalog for diecast collectors. Scan barcodes, match loose cars by photo, and browse your collection anywhere — even offline.',
-  applicationName: 'Pitstop',
+  applicationName: 'Gotham Garage',
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Pitstop' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Gotham Garage' },
 };
 
 export const viewport: Viewport = {

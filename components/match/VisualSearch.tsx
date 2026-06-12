@@ -89,7 +89,7 @@ export function VisualSearch() {
     return (
       <div className="flex flex-col gap-5">
         <p className="text-sm text-ink-muted">
-          Take a top-down photo of the loose car on any background. Pitstop trims the background
+          Take a top-down photo of the loose car on any background. Gotham Garage trims the background
           and finds the closest matches in your garage — all on your phone.
         </p>
         <label className="flex min-h-40 cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-accent/50 bg-panel p-6 text-center">

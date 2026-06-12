@@ -52,7 +52,7 @@ export function Landing() {
         <span className="flex items-center gap-2.5">
           <Logo className="h-9 w-9" />
           <span className="text-lg font-extrabold uppercase tracking-tight text-ink">
-            Pit<span className="text-accent">stop</span>
+            Gotham <span className="text-accent">Garage</span>
           </span>
         </span>
         <Link
@@ -225,7 +225,7 @@ export function Landing() {
       </section>
 
       <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-6 pb-12 text-xs text-ink-muted">
-        <span>Pitstop</span>
+        <span>Gotham Garage</span>
         <span aria-hidden>·</span>
         <span>MIT licensed</span>
         <span aria-hidden>·</span>

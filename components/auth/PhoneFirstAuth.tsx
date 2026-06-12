@@ -6,7 +6,7 @@ import QRCode from 'qrcode';
 import { Logo } from '@/components/ui/Logo';
 
 /**
- * Pitstop is phone-first — the barcode scanner and photo-match need a phone
+ * Gotham Garage is phone-first — the barcode scanner and photo-match need a phone
  * camera. On a desktop/laptop we lead with a QR code so the visitor can open
  * the app on their phone, with an escape hatch to sign in on desktop anyway
  * (browsing the collection works fine without a camera).
@@ -49,16 +49,16 @@ export function PhoneFirstAuth({ children }: { children: React.ReactNode }) {
     <div className="rounded-2xl border border-white/10 bg-panel p-6 text-center">
       <div className="mx-auto mb-4 flex flex-col items-center gap-2">
         <Logo className="h-12 w-12" />
-        <h2 className="text-lg font-bold text-ink">Pitstop is best on your phone</h2>
+        <h2 className="text-lg font-bold text-ink">Gotham Garage is best on your phone</h2>
         <p className="max-w-xs text-sm text-ink-muted">
-          The barcode scanner and photo-match use your phone camera. Scan to open Pitstop there.
+          The barcode scanner and photo-match use your phone camera. Scan to open Gotham Garage there.
         </p>
       </div>
 
       {qr ? (
         <img
           src={qr}
-          alt="QR code — open Pitstop on your phone"
+          alt="QR code — open Gotham Garage on your phone"
           width={200}
           height={200}
           className="mx-auto h-48 w-48 rounded-xl"

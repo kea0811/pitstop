@@ -1,7 +1,7 @@
 import { CollectionBrowser } from '@/components/collection/CollectionBrowser';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 
-export const metadata = { title: 'Pitstop' };
+export const metadata = { title: 'Gotham Garage' };
 export const dynamic = 'force-dynamic';
 
 export default function CollectionPage() {
