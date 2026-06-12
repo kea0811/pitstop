@@ -40,6 +40,35 @@ export interface UploadedPhoto {
   path: string;
 }
 
+/**
+ * Try Cloudflare R2 first via a presigned PUT (egress-free, on Vercel). Returns
+ * null when R2 isn't configured (HTTP 501) so the caller falls back to Supabase.
+ */
+async function uploadToR2(itemId: string, blob: Blob): Promise<UploadedPhoto | null> {
+  const res = await fetch('/api/photos/upload-url', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ itemId, contentType: 'image/jpeg' }),
+  });
+  if (res.status === 501) return null; // not configured — use Supabase
+  const data = (await res.json().catch(() => ({}))) as {
+    uploadUrl?: string;
+    key?: string;
+    publicUrl?: string;
+    error?: string;
+  };
+  if (!res.ok || !data.uploadUrl || !data.publicUrl || !data.key) {
+    throw new Error(data.error ?? 'Could not start the photo upload.');
+  }
+  const put = await fetch(data.uploadUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'image/jpeg' },
+    body: blob,
+  });
+  if (!put.ok) throw new Error(`Photo upload failed (HTTP ${put.status}).`);
+  return { url: data.publicUrl, path: data.key };
+}
+
 /** Upload a compressed JPEG for a collection item; returns a renderable URL. */
 export async function uploadItemPhoto(itemId: string, blob: Blob): Promise<UploadedPhoto> {
   // Demo mode: keep the photo entirely in the browser as a data URL — nothing
@@ -48,6 +77,10 @@ export async function uploadItemPhoto(itemId: string, blob: Blob): Promise<Uploa
     const url = await blobToDataUrl(blob);
     return { url, path: `demo/${itemId}` };
   }
+
+  // Preferred: Cloudflare R2. Falls back to Supabase Storage when unconfigured.
+  const viaR2 = await uploadToR2(itemId, blob);
+  if (viaR2) return viaR2;
 
   const supabase = getSupabaseBrowserClient();
   if (!supabase) throw new Error(STORAGE_NOT_CONFIGURED_MESSAGE);
