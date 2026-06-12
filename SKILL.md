@@ -1,9 +1,9 @@
 ---
-name: pitstop
-description: Use when working on Pitstop — a phone-first Next.js PWA that catalogs a diecast-car collection via UPC barcode scanning and in-browser visual matching (DINOv2 embeddings), with Supabase auth/storage and MongoDB persistence. Covers env setup, the architecture map, and the gotchas that bite.
+name: gotham-garage
+description: Use when working on Gotham Garage — a phone-first Next.js PWA that catalogs a diecast-car collection via UPC barcode scanning and in-browser visual matching (DINOv2 embeddings), with Supabase auth/storage and MongoDB persistence. Covers env setup, the architecture map, and the gotchas that bite.
 ---
 
-# Pitstop
+# Gotham Garage
 
 Phone-first PWA for diecast collectors: scan a UPC on a carded car, or photo-match a loose one
 against your own library, and browse the collection offline.
@@ -11,12 +11,12 @@ against your own library, and browse the collection offline.
 ## When to reach for this
 
 User asks for:
-- "add a feature to / fix a bug in Pitstop"
+- "add a feature to / fix a bug in Gotham Garage"
 - "why isn't the barcode scanner / visual match / photo upload working"
-- "set up Pitstop locally" or "deploy Pitstop"
+- "set up Gotham Garage locally" or "deploy Gotham Garage"
 
 Not this skill:
-- ❌ Building a *global* car-recognition model — Pitstop deliberately does retrieval against the
+- ❌ Building a *global* car-recognition model — Gotham Garage deliberately does retrieval against the
   user's own library + human confirmation, not top-1 classification.
 - ❌ Marketplace/pricing features — out of scope by design (PRD §3).
 

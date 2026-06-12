@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 /**
- * Pitstop emblem — a gold bat-in-ring badge (generated artwork in
+ * Gotham Garage emblem — a gold bat-in-ring badge (generated artwork in
  * /public/logo.png). Decorative; hidden from assistive tech since the wordmark
  * beside it carries the name.
  */

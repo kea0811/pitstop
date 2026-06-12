@@ -132,7 +132,7 @@ export function Landing() {
                 Get started
               </Link>
               <a
-                href="https://github.com/kea0811/pitstop"
+                href="https://github.com/kea0811/gotham-garage"
                 target="_blank"
                 rel="noreferrer"
                 className="flex min-h-12 items-center rounded-full border border-white/20 bg-black/30 px-7 text-base font-semibold text-ink backdrop-blur hover:border-accent/60"
@@ -229,7 +229,7 @@ export function Landing() {
         <span aria-hidden>·</span>
         <span>MIT licensed</span>
         <span aria-hidden>·</span>
-        <a href="https://github.com/kea0811/pitstop" className="hover:text-ink" target="_blank" rel="noreferrer">
+        <a href="https://github.com/kea0811/gotham-garage" className="hover:text-ink" target="_blank" rel="noreferrer">
           GitHub
         </a>
       </footer>

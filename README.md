@@ -1,12 +1,12 @@
-# Pitstop — phone-first catalog for diecast collectors
+# Gotham Garage — phone-first catalog for diecast collectors
 
 ![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
 ![Tests 100% coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![License MIT](https://img.shields.io/badge/license-MIT-a78bfa)
 
-**🌐 [Live demo →](https://pitstop-sage.vercel.app)**
+**🌐 [Live demo →](https://gotham-garage.vercel.app)**
 
-Pitstop is an installable **PWA** that lets a diecast-car collector catalog their personal
+Gotham Garage is an installable **PWA** that lets a diecast-car collector catalog their personal
 collection from a phone:
 
 - **Carded cars** — scan the UPC barcode, metadata is looked up and cached forever.
@@ -82,7 +82,7 @@ using (
 );
 ```
 
-Pitstop stores a long-lived **signed URL** per photo, so private-bucket images render with a
+Gotham Garage stores a long-lived **signed URL** per photo, so private-bucket images render with a
 plain `<img>`. If the bucket is missing you'll get a clear in-app error
 (*"Photo storage not configured — create a 'photos' bucket in Supabase"*) and the car still
 saves without its photo.

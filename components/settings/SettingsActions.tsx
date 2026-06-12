@@ -56,7 +56,7 @@ export function SettingsActions() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `pitstop-collection-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `gotham-garage-collection-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
