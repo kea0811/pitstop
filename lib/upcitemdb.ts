@@ -1,12 +1,33 @@
 import type { UpcProductData } from '@/models/UpcCache';
 
 /**
- * upcitemdb trial endpoint wrapper. No API key, 100 lookups/day.
- * Every successful lookup is cached forever in `upc_cache` (a UPC's metadata
- * is immutable) — see /api/upc/[code].
+ * upcitemdb wrapper. By default it uses the keyless *trial* endpoint, which is
+ * rate-limited to ~100 calls/day **per source IP** (on Vercel that IP is shared,
+ * so the budget is fuzzy). Set UPCITEMDB_KEY to switch to the authenticated v1
+ * API, which meters per-key instead — a real quota you control.
+ *
+ * Barcode lookups are cached forever in `upc_cache` (immutable); keyword
+ * searches are cached with a TTL in `upc_search_cache` (listings change).
  */
 
-const DEFAULT_BASE = 'https://api.upcitemdb.com/prod/trial';
+const TRIAL_BASE = 'https://api.upcitemdb.com/prod/trial';
+const PAID_BASE = 'https://api.upcitemdb.com/prod/v1';
+
+/**
+ * Resolve the endpoint base + request headers. An explicit baseUrl wins, then
+ * UPCITEMDB_BASE, else trial/paid depending on whether UPCITEMDB_KEY is set.
+ * The paid API authenticates with `user_key` + `key_type: 3scale` headers.
+ */
+function resolveEndpoint(baseUrl?: string): { base: string; headers: Record<string, string> } {
+  const key = process.env.UPCITEMDB_KEY;
+  const base = baseUrl ?? process.env.UPCITEMDB_BASE ?? (key ? PAID_BASE : TRIAL_BASE);
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  if (key) {
+    headers.user_key = key;
+    headers.key_type = '3scale';
+  }
+  return { base, headers };
+}
 
 /** User-facing copy when the free daily quota is exhausted (PRD §10). */
 export const RATE_LIMIT_MESSAGE =
@@ -80,13 +101,11 @@ export async function lookupUpc(
     return { status: 'error', message: 'UPC must be 12 or 13 digits.' };
   }
   const fetchImpl = options.fetchImpl ?? fetch;
-  const base = options.baseUrl ?? process.env.UPCITEMDB_BASE ?? DEFAULT_BASE;
+  const { base, headers } = resolveEndpoint(options.baseUrl);
 
   let res: Response;
   try {
-    res = await fetchImpl(`${base}/lookup?upc=${encodeURIComponent(upc)}`, {
-      headers: { Accept: 'application/json' },
-    });
+    res = await fetchImpl(`${base}/lookup?upc=${encodeURIComponent(upc)}`, { headers });
   } catch {
     return { status: 'error', message: 'Could not reach the UPC lookup service.' };
   }
@@ -133,13 +152,11 @@ export async function searchProducts(
   if (!q) return { status: 'error', message: 'Type something to search for.' };
 
   const fetchImpl = options.fetchImpl ?? fetch;
-  const base = options.baseUrl ?? process.env.UPCITEMDB_BASE ?? DEFAULT_BASE;
+  const { base, headers } = resolveEndpoint(options.baseUrl);
 
   let res: Response;
   try {
-    res = await fetchImpl(`${base}/search?s=${encodeURIComponent(q)}&type=product`, {
-      headers: { Accept: 'application/json' },
-    });
+    res = await fetchImpl(`${base}/search?s=${encodeURIComponent(q)}&type=product`, { headers });
   } catch {
     return { status: 'error', message: 'Could not reach the catalog search service.' };
   }

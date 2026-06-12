@@ -167,6 +167,16 @@ describe('lookupUpc', () => {
     expect(globalFetch).toHaveBeenCalledOnce();
   });
 
+  it('uses the authenticated v1 endpoint when UPCITEMDB_KEY is set', async () => {
+    vi.stubEnv('UPCITEMDB_KEY', 'secret-key');
+    const fetchImpl = vi.fn(async () => jsonResponse(okBody()));
+    await lookupUpc(VALID_UPC, { fetchImpl: fetchImpl as typeof fetch });
+    expect(fetchImpl).toHaveBeenCalledWith(
+      `https://api.upcitemdb.com/prod/v1/lookup?upc=${VALID_UPC}`,
+      { headers: { Accept: 'application/json', user_key: 'secret-key', key_type: '3scale' } },
+    );
+  });
+
   it('maps 404 to not_found', async () => {
     const fetchImpl = vi.fn(async () => jsonResponse({}, { status: 404 }));
     expect(await lookupUpc(VALID_UPC, { fetchImpl: fetchImpl as typeof fetch })).toEqual({
