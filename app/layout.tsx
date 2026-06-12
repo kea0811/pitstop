@@ -11,16 +11,16 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'Pitstop', template: '%s — Pitstop' },
+  title: { default: 'The Vault', template: '%s — The Vault' },
   description:
     'Phone-first catalog for diecast collectors. Scan barcodes, match loose cars by photo, and browse your collection anywhere — even offline.',
-  applicationName: 'Pitstop',
+  applicationName: 'The Vault',
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Pitstop' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'The Vault' },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#07070c',
+  themeColor: '#0a0a0a',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',

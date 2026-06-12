@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { fetchWithIdbFallback } from '@/lib/idb-cache';
 import { Spinner } from '@/components/ui/Spinner';
+import { Logo } from '@/components/ui/Logo';
 import { ItemCard } from '@/components/collection/ItemCard';
 import { CameraFab } from '@/components/collection/CameraFab';
 import type { CollectionItemDTO } from '@/models/CollectionItem';
@@ -15,12 +16,14 @@ interface ListResponse {
   error?: string;
 }
 
+type StatusTab = 'all' | 'owned' | 'wanted';
+
 export function CollectionBrowser() {
   const [items, setItems] = useState<CollectionItemDTO[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [fromCache, setFromCache] = useState(false);
   const [query, setQuery] = useState('');
-  const [yearFilter, setYearFilter] = useState<number | null>(null);
+  const [statusTab, setStatusTab] = useState<StatusTab>('all');
   const [seriesFilter, setSeriesFilter] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -41,10 +44,15 @@ export function CollectionBrowser() {
     void load();
   }, [load]);
 
-  const years = useMemo(
-    () => [...new Set((items ?? []).map((i) => i.year).filter((y): y is number => Boolean(y)))].sort((a, b) => b - a),
+  const ownedCount = useMemo(
+    () => (items ?? []).filter((i) => i.status === 'owned').length,
     [items],
   );
+  const wantedCount = useMemo(
+    () => (items ?? []).filter((i) => i.status === 'wanted').length,
+    [items],
+  );
+
   const seriesList = useMemo(
     () => [...new Set((items ?? []).map((i) => i.series).filter((s): s is string => Boolean(s)))].sort(),
     [items],
@@ -53,96 +61,185 @@ export function CollectionBrowser() {
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return (items ?? []).filter((item) => {
-      if (yearFilter && item.year !== yearFilter) return false;
+      if (statusTab !== 'all' && item.status !== statusTab) return false;
       if (seriesFilter && item.series !== seriesFilter) return false;
       if (!q) return true;
       return [item.name, item.series, item.notes, String(item.year ?? '')]
         .filter(Boolean)
         .some((field) => field!.toLowerCase().includes(q));
     });
-  }, [items, query, yearFilter, seriesFilter]);
-
-  if (error) {
-    return (
-      <div className="rounded-2xl border border-white/10 bg-panel p-6 text-center">
-        <p className="text-base text-ink">{error}</p>
-        <button onClick={() => { setError(null); void load(); }} className="mt-4 min-h-12 rounded-xl bg-accent px-6 font-semibold text-bg">
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  if (items === null) return <Spinner label="Opening the garage…" />;
-
-  // First-run: never an empty state without a CTA (PRD §12).
-  if (items.length === 0) {
-    return (
-      <div className="flex flex-col items-center gap-6 rounded-2xl border border-dashed border-accent/40 bg-panel px-6 py-16 text-center">
-        <p className="text-5xl" aria-hidden>🏎️</p>
-        <div>
-          <h2 className="text-xl font-bold text-ink">Your garage is empty</h2>
-          <p className="mt-2 text-sm text-ink-muted">
-            Scan the barcode on a carded car, or snap a photo of a loose one.
-          </p>
-        </div>
-        <Link
-          href="/add/scan"
-          className="flex min-h-14 w-full max-w-xs items-center justify-center rounded-2xl bg-accent px-6 text-lg font-bold text-bg"
-        >
-          Scan your first car
-        </Link>
-        <Link href="/add" className="text-sm text-accent underline-offset-4 hover:underline">
-          Other ways to add
-        </Link>
-      </div>
-    );
-  }
+  }, [items, query, statusTab, seriesFilter]);
 
   return (
-    <div>
-      {fromCache ? (
-        <p className="mb-3 rounded-xl border border-accent/30 bg-accent/10 px-4 py-2 text-xs text-ink">
-          You&apos;re offline — showing your last synced collection.
-        </p>
-      ) : null}
+    <>
+      <Masthead ownedCount={ownedCount} wantedCount={wantedCount} />
 
-      <input
-        type="search"
-        placeholder="Search name, series, notes…"
-        aria-label="Search collection"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="mb-3 w-full min-h-12 rounded-xl border border-white/10 bg-panel px-4 text-base text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
-      />
+      <div className="px-4 pt-5">
+        {error ? (
+          <div className="rounded-2xl border border-white/10 bg-panel p-6 text-center">
+            <p className="text-base text-ink">{error}</p>
+            <button
+              onClick={() => {
+                setError(null);
+                void load();
+              }}
+              className="mt-4 min-h-12 rounded-xl bg-accent px-6 font-semibold text-bg"
+            >
+              Retry
+            </button>
+          </div>
+        ) : items === null ? (
+          <Spinner label="Opening the vault…" />
+        ) : items.length === 0 ? (
+          <EmptyVault />
+        ) : (
+          <>
+            {fromCache ? (
+              <p className="mb-3 rounded-xl border border-accent/30 bg-accent/10 px-4 py-2 text-xs text-ink">
+                You&apos;re offline — showing your last synced collection.
+              </p>
+            ) : null}
 
-      {(years.length > 0 || seriesList.length > 0) && (
-        <div className="mb-4 flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Filters">
-          {years.map((y) => (
-            <FilterChip key={y} active={yearFilter === y} onClick={() => setYearFilter(yearFilter === y ? null : y)}>
-              {y}
-            </FilterChip>
-          ))}
-          {seriesList.map((s) => (
-            <FilterChip key={s} active={seriesFilter === s} onClick={() => setSeriesFilter(seriesFilter === s ? null : s)}>
-              {s}
-            </FilterChip>
-          ))}
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                type="search"
+                placeholder="Search by name, series, model…"
+                aria-label="Search collection"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="min-h-12 flex-1 rounded-full border border-white/10 bg-panel px-5 text-base text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+              />
+              <div className="flex gap-2" role="group" aria-label="Status filter">
+                <StatusChip active={statusTab === 'all'} onClick={() => setStatusTab('all')}>
+                  All
+                </StatusChip>
+                <StatusChip active={statusTab === 'owned'} onClick={() => setStatusTab('owned')}>
+                  Owned
+                </StatusChip>
+                <StatusChip active={statusTab === 'wanted'} onClick={() => setStatusTab('wanted')}>
+                  Wishlist
+                </StatusChip>
+              </div>
+            </div>
+
+            {seriesList.length > 0 && (
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Series filter">
+                {seriesList.map((s) => (
+                  <FilterChip
+                    key={s}
+                    active={seriesFilter === s}
+                    onClick={() => setSeriesFilter(seriesFilter === s ? null : s)}
+                  >
+                    {s}
+                  </FilterChip>
+                ))}
+              </div>
+            )}
+
+            <p className="mb-3 mt-4 text-xs uppercase tracking-wider text-ink-muted">
+              {visible.length} of {items.length} cars
+            </p>
+
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {visible.map((item) => (
+                <ItemCard key={item.id} item={item} />
+              ))}
+            </ul>
+
+            <CameraFab />
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
+function Masthead({ ownedCount, wantedCount }: { ownedCount: number; wantedCount: number }) {
+  return (
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-bg/90 backdrop-blur">
+      <div className="flex items-center justify-between gap-3 px-4 py-3">
+        <Link href="/collection" className="flex min-w-0 items-center gap-3">
+          <Logo className="h-11 w-11 shrink-0" />
+          <span className="min-w-0">
+            <span className="block truncate text-xl font-extrabold uppercase leading-none tracking-tight text-ink">
+              The <span className="text-accent">Vault</span>
+            </span>
+            <span className="mt-0.5 block truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
+              Diecast Collection
+            </span>
+          </span>
+        </Link>
+
+        <div className="flex items-center gap-4">
+          <Stat value={ownedCount} label="Owned" />
+          <Stat value={wantedCount} label="Wishlist" />
+          <Link
+            href="/add"
+            className="flex min-h-11 shrink-0 items-center rounded-full bg-accent px-4 text-sm font-bold text-bg transition-transform active:scale-95"
+          >
+            + Add Car
+          </Link>
+          <Link
+            href="/settings"
+            aria-label="Settings"
+            className="hidden h-11 w-11 items-center justify-center rounded-full text-ink-muted hover:text-ink sm:flex"
+          >
+            ⚙
+          </Link>
         </div>
-      )}
+      </div>
+    </header>
+  );
+}
 
-      <p className="mb-3 text-xs text-ink-muted">
-        {visible.length} of {items.length} cars
-      </p>
-
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {visible.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </ul>
-
-      <CameraFab />
+function Stat({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="hidden text-center sm:block">
+      <div className="text-xl font-extrabold leading-none text-accent">{value}</div>
+      <div className="mt-0.5 text-[10px] uppercase tracking-wider text-ink-muted">{label}</div>
     </div>
+  );
+}
+
+function EmptyVault() {
+  return (
+    <div className="flex flex-col items-center gap-5 px-6 py-20 text-center">
+      <svg viewBox="0 0 100 48" className="h-16 w-24 fill-accent/80" aria-hidden role="presentation">
+        <path d="M50 6c-3 0-5 4-5 9-4-6-10-9-17-9-3 6-2 10 1 13-4-1-8 0-11 2 4 1 7 3 9 6-3 0-6 2-8 5 8-2 14 0 18 5 1-5 3-8 7-9-1 4-1 7 1 10 2-3 3-6 5-7 2 1 3 4 5 7 2-3 2-6 1-10 4 1 6 4 7 9 4-5 10-7 18-5-2-3-5-5-8-5 2-3 5-5 9-6-3-2-7-3-11-2 3-3 4-7 1-13-7 0-13 3-17 9 0-5-2-9-5-9z" />
+      </svg>
+      <div>
+        <h2 className="text-2xl font-extrabold text-ink">The vault is empty</h2>
+        <p className="mt-2 text-base text-ink-muted">Start adding your diecast collection</p>
+      </div>
+      <Link
+        href="/add"
+        className="flex min-h-12 items-center justify-center rounded-full bg-accent px-6 text-base font-bold text-bg transition-transform active:scale-95"
+      >
+        + Add First Car
+      </Link>
+    </div>
+  );
+}
+
+function StatusChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={`min-h-12 shrink-0 rounded-full px-5 text-sm font-semibold transition-colors ${
+        active ? 'bg-accent text-bg' : 'bg-panel text-ink-muted hover:text-ink'
+      }`}
+    >
+      {children}
+    </button>
   );
 }
 

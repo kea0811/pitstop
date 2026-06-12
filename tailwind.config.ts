@@ -5,12 +5,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: '#07070c',
-        panel: '#101018',
-        ink: '#f4f4f7',
-        'ink-muted': '#9b9ba8',
-        accent: '#a78bfa',
-        'accent-deep': '#7c5cf0',
+        bg: '#0a0a0a',
+        panel: '#161616',
+        ink: '#f4f4f4',
+        'ink-muted': '#8a8a8a',
+        accent: '#ffd400',
+        'accent-deep': '#e6bf00',
         danger: '#f87171',
         ok: '#34d399',
       },

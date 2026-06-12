@@ -2,14 +2,14 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Pitstop — diecast collection',
-    short_name: 'Pitstop',
+    name: 'The Vault — diecast collection',
+    short_name: 'The Vault',
     description:
       'Phone-first catalog for diecast collectors. Scan barcodes, match loose cars by photo, browse offline.',
     start_url: '/collection',
     display: 'standalone',
-    background_color: '#07070c',
-    theme_color: '#07070c',
+    background_color: '#0a0a0a',
+    theme_color: '#0a0a0a',
     orientation: 'portrait',
     categories: ['lifestyle', 'utilities'],
     icons: [

@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --bg: #07070c;
-  --panel: #101018;
-  --ink: #f4f4f7;
-  --accent: #a78bfa;
+  --bg: #0a0a0a;
+  --panel: #161616;
+  --ink: #f4f4f4;
+  --accent: #ffd400;
 }
 
 html {
